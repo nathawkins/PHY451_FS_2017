@@ -1,0 +1,1 @@
+Results --> Calculated Value of G: 1.5720398057660063e-10 +/- 2.47e-12 m^3/(kg s^2). Percent Error from Expected Value: -135.54404588587582%.
