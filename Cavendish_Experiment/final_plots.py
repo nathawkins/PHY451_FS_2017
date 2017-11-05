@@ -9,22 +9,23 @@ trial_number = [1,2,3,4]
 # thetad_vals = [1.289, 1.153, 0.961, 1.292]
 # thetad_errs = [0.004, 0.004, 0.003, 1.032]
 
-thetad_vals = [1.289, 1.153, 0.961]
-thetad_errs = [0.04, 0.04, 0.03]
-
-for i in range(len(trial_number)):
-    # plt.plot(trial_number[i], G_vals[i])
-    plt.errorbar(trial_number[i], G_vals[i]/2.3423, xerr = 0, yerr = G_errs[i], fmt = 'o', label = "{}".format(trial_name[i]))
-plt.title("Calculated Values of G")
-plt.xlabel("Trial")
-plt.ylabel("G (m^3 kg^(-1) s^(-2))")
-plt.axhline(y = 6.67E-11, xmin = 0, xmax = 4, label = "Expected Value of G", c = 'm', ls = '--')
-plt.xticks(trial_number)
-plt.legend(loc='upper left')
-plt.tight_layout()
-plt.savefig("final_plots_of_G_scaled.png")
-
-print(np.array(G_vals)/2.3423)
+# thetad_vals = [1.289, 1.153, 0.961]
+# thetad_errs = [0.04, 0.04, 0.03]
+#
+# for i in range(len(trial_number)):
+#     # plt.plot(trial_number[i], G_vals[i])
+#     plt.errorbar(trial_number[i], G_vals[i]/2.3423, xerr = 0, yerr = G_errs[i], fmt = 'o', label = "{}".format(trial_name[i]))
+# plt.title("Calculated Values of G")
+# plt.xlabel("Trial")
+# plt.ylabel("G (m^3 kg^(-1) s^(-2))")
+# plt.axhline(y = 6.67E-11, xmin = 0, xmax = 4, label = "Expected Value of G", c = 'm', ls = '--')
+# plt.xticks(trial_number)
+# plt.legend(loc='upper left')
+# plt.tight_layout()
+# plt.savefig("final_plots_of_G_scaled.png")
+#
+# print(np.array(G_vals)/2.3423)
+print(np.average(G_vals), np.average(G_errs))
 
 
 
