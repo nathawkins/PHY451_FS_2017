@@ -8,13 +8,13 @@ data_dir = "../Data/"
 prefix = "2017-11-28-"
 suffix = "-pulse-NMR-data"
 
-T2_files = ["105856", "111023", "112038", "112817", "113807", "183508", "183928", "114941", "115303", "115554", "115933", "120402", "184420", "184623"]
+T2_files = ["105856", "183928", "183508", "111023", "112038", "112817", "113807", "115303", "184623", "184420", "114941", "115554", "115933", "120402"]
 
-sample_names = ["0.1M $CuSO_4$", "0.05M $CuSO_4$", "0.04M $CuSO_4$", "0.03M $CuSO_4$", "0.02M $CuSO_4$", "0.07M $CuSO_4$", "0.09M $CuSO_4$", "0.05M $FeCl_3$", "0.1M $FeCl_3$", "0.04M $FeCl_3$", "0.03M $FeCl_3$", "0.02M $FeCl_3$", "0.07M $FeCl_3$", "0.09M $FeCl_3$"]
+sample_names = ["0.1M $CuSO_4$","0.09M $CuSO_4$", "0.07M $CuSO_4$", "0.05M $CuSO_4$", "0.04M $CuSO_4$", "0.03M $CuSO_4$", "0.02M $CuSO_4$", "0.1M $FeCl_3$", "0.09M $FeCl_3$", "0.07M $FeCl_3$", "0.05M $FeCl_3$", "0.04M $FeCl_3$", "0.03M $FeCl_3$", "0.02M $FeCl_3$"]
 
 T2_values = []
 T2_uncertainties = []
-concentrations = [0.1, 0.05, 0.04, 0.03, 0.02, 0.07, 0.09, 0.05, 0.1, 0.04, 0.03, 0.02, 0.07, 0.09]
+concentrations = [0.1, 0.09, 0.07, 0.05, 0.04, 0.03, 0.02, 0.1, 0.09, 0.07, 0.05, 0.04, 0.03, 0.02]
 
 for i in range(len(T2_files)):
     number = T2_files[i]
@@ -50,12 +50,22 @@ for i in range(len(T2_files)):
     plt.text(min(time), min(amp), sample_type)
     plt.savefig("../Plots/"+filename+".png")
 
+
+def decay(t, A, b):
+    return A*np.exp(-t/b)
+
+popt, pcov = cf(decay, np.array(concentrations[0:7]), np.array(T2_values[0:7]), p0 = [max(T2_values[0:7]), 7E-3])
+# popt, pcov = cf(decay, np.array(concentrations[7:15]), np.array(T2_values[7:15]), p0 = [max(T2_values[7:15]), 7E-3])
+
 plt.figure()
 plt.xlabel("Concentration (M)")
 plt.ylabel("$T_2$ (ms)")
-# plt.title("$T_2$ Values Versus Concentration, $CuSO_4$")
-# plt.errorbar(concentrations[0:7], T2_values[0:7], yerr = 2*np.array(T2_uncertainties[0:7]), capsize=3, elinewidth=1, fmt = 'o', fillstyle = 'none')
-# plt.savefig("../Plots/"+"T2_concentrations_cuso4.png")
-plt.title("$T_2$ Values Versus Concentration, $FeCl_3$")
-plt.errorbar(concentrations[8:15], T2_values[8:15], yerr = T2_uncertainties[8:15], capsize=3, elinewidth=1, fmt = 'o', fillstyle = 'none')
-plt.savefig("../Plots/"+"T2_concentrations_fecl3.png")
+plt.title("$T_2$ Values Versus Concentration, $CuSO_4$")
+plt.errorbar(concentrations[0:7], T2_values[0:7], yerr = 2*np.array(T2_uncertainties[0:7]), capsize=3, elinewidth=1, fmt = 'o', fillstyle = 'none')
+plt.plot(concentrations[0:7], decay(np.array(concentrations[0:7]),*popt), 'r--')
+plt.savefig("../Plots/"+"T2_concentrations_cuso4.png")
+
+# plt.title("$T_2$ Values Versus Concentration, $FeCl_3$")
+# plt.errorbar(concentrations[7:15], T2_values[7:15], yerr = T2_uncertainties[7:15], capsize=3, elinewidth=1, fmt = 'o', fillstyle = 'none')
+# plt.plot(concentrations[7:15], decay(np.array(concentrations[7:15]),*popt), 'r--')
+# plt.savefig("../Plots/"+"T2_concentrations_fecl3.png")

@@ -8,13 +8,13 @@ data_dir = "../Data/"
 prefix = "2017-11-28-"
 suffix = "-pulse-NMR-data"
 
-T1_files = ["190345", "191139", "191848", "192518", "193141", "193909", "194315"]
+T1_files = ["190345", "194315", "193909", "191139", "191848", "192518", "193141"]
 
-sample_names = ["0.1M $CuSO_4$", "0.05M $CuSO_4$", "0.04M $CuSO_4$", "0.03M $CuSO_4$", "0.02M $CuSO_4$", "0.07M $CuSO_4$", "0.09M $CuSO_4$"]
+sample_names = ["0.1M $CuSO_4$", "0.09M $CuSO_4$","0.07M $CuSO_4$",  "0.05M $CuSO_4$", "0.04M $CuSO_4$", "0.03M $CuSO_4$", "0.02M $CuSO_4$"]
 
 T1_values = []
 T1_uncertainties = []
-concentrations = [0.1, 0.05, 0.04, 0.03, 0.02, 0.07, 0.09]
+concentrations = [0.1, 0.09, 0.07, 0.05, 0.04, 0.03, 0.02]
 
 for i in range(len(T1_files)):
     number = T1_files[i]
@@ -67,9 +67,15 @@ for i in range(len(T1_files)):
     plt.savefig("../Plots/"+filename+".png")
 
 
+def decay(t, A, b):
+    return A*np.exp(-t/b)
+
+popt, pcov = cf(decay, np.array(concentrations), np.array(T1_values), p0 = [max(T1_values), 7E-3])
+
 plt.figure()
 plt.xlabel("Concentration (M)")
 plt.ylabel("$T_1$ (ms)")
 plt.title("$T_1$ Values Versus Concentration, $CuSO_4$")
 plt.errorbar(concentrations, T1_values, yerr = np.array(T1_uncertainties), capsize=3, elinewidth=1, fmt = 'o', fillstyle = 'none')
+plt.plot(concentrations, decay(np.array(concentrations),*popt), 'r--')
 plt.savefig("../Plots/"+"T1_concentrations_cuso4.png")
